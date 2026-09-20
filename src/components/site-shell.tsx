@@ -1,6 +1,7 @@
 "use client";
 
 import { useCatalog } from "@/components/catalog/catalog-provider";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -23,32 +24,39 @@ function BrandLogo() {
   );
 }
 const navigation = [
-  ["Início", "inicio"],
-  ["Produtos", "catalogo"],
-  ["Categorias", "categorias"],
-  ["Ofertas", "ofertas"],
-  ["Serviços", "servicos"],
-  ["Sobre", "sobre"],
-  ["Contato", "contato"],
+  ["Início", "/#inicio"],
+  ["Produtos", "/produtos"],
+  ["Categorias", "/#categorias"],
+  ["Ofertas", "/ofertas"],
+  ["Serviços", "/servicos"],
+  ["Sobre", "/sobre"],
+  ["Contato", "/contato"],
 ];
 export function Header() {
   const { quantidadeTotal: quantidade } = useCatalog();
   const [aberto, setAberto] = useState(false);
+  const pathname = usePathname();
+  const institutional = [
+    "/ofertas",
+    "/servicos",
+    "/sobre",
+    "/contato",
+  ].includes(pathname);
   return (
     <header className="site-header">
       <Container className="header-inner">
         <BrandLogo />
         <nav aria-label="Navegação principal" className="desktop-nav">
           {navigation.map(([label, id]) => (
-            <Link key={id} href={id === "catalogo" ? "/produtos" : "/#" + id}>
+            <Link key={id} href={id}>
               {label}
             </Link>
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <a
+          <Link
             className={buttonStyles("secondary", "cart-link")}
-            href="#orcamento"
+            href={institutional ? "/produtos#orcamento" : "#orcamento"}
             aria-label={"Meu orçamento: " + quantidade + " itens"}
           >
             <svg
@@ -63,7 +71,7 @@ export function Header() {
               <path d="M3 3h2l3 13h11l3-9H6M9 20h.01M18 20h.01" />
             </svg>
             <span aria-live="polite">{quantidade}</span>
-          </a>
+          </Link>
           <button
             className="menu-toggle"
             aria-expanded={aberto}
@@ -81,11 +89,7 @@ export function Header() {
           hidden={!aberto}
         >
           {navigation.map(([label, id]) => (
-            <Link
-              key={id}
-              href={id === "catalogo" ? "/produtos" : "/#" + id}
-              onClick={() => setAberto(false)}
-            >
+            <Link key={id} href={id} onClick={() => setAberto(false)}>
               {label}
             </Link>
           ))}
@@ -121,7 +125,7 @@ export function Footer() {
           className="flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold text-brand"
         >
           {navigation.slice(1).map(([label, id]) => (
-            <Link href={id === "catalogo" ? "/produtos" : "/#" + id} key={id}>
+            <Link href={id} key={id}>
               {label}
             </Link>
           ))}

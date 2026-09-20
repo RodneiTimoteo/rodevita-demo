@@ -28,7 +28,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <a href="#catalogo" className="skip-link">
-          Pular para o catálogo
+          Pular para o conteúdo
         </a>
         <CatalogProvider>
           <Header />

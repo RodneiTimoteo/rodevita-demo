@@ -687,3 +687,61 @@
     color: var(--health);
   }
 }
+
+@layer components {
+  .institutional-hero {
+    background:
+      radial-gradient(
+        ellipse at right top,
+        var(--health-soft),
+        transparent 70%
+      ),
+      var(--background);
+    border-bottom: 1px solid var(--border);
+  }
+  .institutional-project {
+    display: grid;
+    align-items: center;
+    gap: 2.5rem;
+    padding-block: 1rem 2rem;
+  }
+  .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--brand);
+  }
+  .concept-map {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    background: var(--health-soft);
+    padding: clamp(2rem, 6vw, 4rem);
+  }
+  .map-roads {
+    position: absolute;
+    inset: -40%;
+    transform: rotate(-18deg);
+    background:
+      repeating-linear-gradient(
+        0deg,
+        transparent 0 78px,
+        var(--surface) 78px 90px,
+        transparent 90px 160px
+      ),
+      repeating-linear-gradient(
+        90deg,
+        transparent 0 110px,
+        var(--surface) 110px 127px,
+        transparent 127px 210px
+      );
+    opacity: 0.75;
+  }
+}
+@media (min-width: 1024px) {
+  .institutional-project {
+    grid-template-columns: 1.5fr 1fr;
+  }
+}
