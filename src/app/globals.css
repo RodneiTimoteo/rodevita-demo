@@ -1,26 +1,557 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  color-scheme: light;
+  --brand: #0b3d4a;
+  --health: #2e7d6b;
+  --gold: #d4b574;
+  --background: #f8faf9;
+  --border: #e5eae9;
+  --foreground: #17313a;
+  --muted: #66777d;
+  --surface: #ffffff;
+  --brand-hover: #082f39;
+  --health-hover: #246454;
+  --brand-soft: #eaf1f3;
+  --health-soft: #eaf4ef;
+  --warning: #785719;
+  --warning-soft: #faf3e4;
+  --danger: #a33e46;
+  --danger-soft: #fbedef;
+  --radius-control: 0.75rem;
+  --radius-card: 1.25rem;
+  --shadow-card: 0 4px 24px rgb(11 61 74 / 5%);
 }
-
 @theme inline {
+  --color-brand: var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-brand-soft: var(--brand-soft);
+  --color-health: var(--health);
+  --color-health-hover: var(--health-hover);
+  --color-health-soft: var(--health-soft);
+  --color-gold: var(--gold);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-surface: var(--surface);
+  --color-warning: var(--warning);
+  --color-warning-soft: var(--warning-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-montserrat);
 }
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-inter), sans-serif;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  button {
+    font-family: var(--font-montserrat), sans-serif;
+  }
+  button:not(:disabled),
+  a {
+    cursor: pointer;
+  }
+  :focus-visible {
+    outline: 3px solid var(--health);
+    outline-offset: 4px;
+  }
+  ::selection {
+    background: var(--brand);
+    color: var(--surface);
+  }
+  [id] {
+    scroll-margin-top: 1.5rem;
+  }
+}
+@layer components {
+  .ui-container {
+    width: 100%;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: clamp(1rem, 4vw, 1.5rem);
+  }
+  .ui-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    min-height: 3rem;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid transparent;
+    border-radius: var(--radius-control);
+    font-family: var(--font-montserrat), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-align: center;
+    transition:
+      background-color 150ms,
+      border-color 150ms;
+  }
+  .ui-button--primary {
+    background: var(--brand);
+    color: var(--surface);
+  }
+  .ui-button--primary:hover {
+    background: var(--brand-hover);
+  }
+  .ui-button--secondary {
+    background: var(--surface);
+    color: var(--brand);
+    border-color: var(--border);
+  }
+  .ui-button--secondary:hover {
+    background: var(--brand-soft);
+    border-color: var(--brand);
+  }
+  .ui-button--whatsapp {
+    background: var(--health);
+    color: var(--surface);
+  }
+  .ui-button--whatsapp:hover {
+    background: var(--health-hover);
+  }
+  .ui-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  .ui-card {
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    background: var(--surface);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-card);
+  }
+  .ui-input {
+    width: 100%;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-control);
+    background: var(--surface);
+    padding: 1rem 1.25rem;
+    color: var(--foreground);
+    box-shadow: var(--shadow-card);
+  }
+  .ui-input::placeholder {
+    color: var(--muted);
+  }
+  .ui-input:focus-visible {
+    border-color: var(--health);
+  }
+  .ui-section-title {
+    font-family: var(--font-montserrat), sans-serif;
+    font-weight: 700;
+    color: var(--brand);
+    line-height: 1.3;
+    text-wrap: balance;
+  }
+  .ui-badge {
+    display: inline-flex;
+    border-radius: 999px;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+  .ui-badge--free {
+    background: var(--health-soft);
+    color: var(--health);
+  }
+  .ui-badge--prescription {
+    background: var(--warning-soft);
+    color: var(--warning);
+  }
+  .ui-badge--retained {
+    background: var(--danger-soft);
+    color: var(--danger);
+  }
+  .ui-badge--offer {
+    background: var(--brand-soft);
+    color: var(--brand);
+  }
+  .site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .site-footer {
+    margin-top: auto;
+    background: var(--surface);
+    border-top: 2px solid var(--gold);
+  }
+  /* Enquadra somente a arte, descontando as margens transparentes do PNG original. */
+  .brand-logo {
+    display: block;
+    position: relative;
+    width: min(17.5rem, 100%);
+    aspect-ratio: 1352 / 527;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  .brand-logo img {
+    position: absolute;
+    width: 107.1%;
+    max-width: none;
+    height: auto;
+    left: -3.48%;
+    top: -60.53%;
+  }
+  .skip-link {
+    position: absolute;
+    z-index: 50;
+    top: 1rem;
+    left: 1rem;
+    transform: translateY(-200%);
+    background: var(--brand);
+    color: var(--surface);
+    padding: 1rem;
+    border-radius: var(--radius-control);
+  }
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 40;
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-block: 0.8rem;
+    flex-wrap: wrap;
+  }
+  .site-header .brand-logo {
+    width: 12rem;
+  }
+  .desktop-nav {
+    display: flex;
+    gap: 1.3rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--brand);
+  }
+  .desktop-nav a,
+  .mobile-nav a {
+    transition: color 180ms ease;
+  }
+  .desktop-nav a:hover,
+  .mobile-nav a:hover {
+    color: var(--health);
+  }
+  .menu-toggle {
+    display: none;
+    min-width: 3rem;
+    min-height: 3rem;
+    font-size: 1.5rem;
+    color: var(--brand);
+  }
+  .mobile-nav {
+    width: 100%;
+    padding-bottom: 1rem;
+  }
+  .mobile-nav a {
+    display: block;
+    padding: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+  .eyebrow {
+    margin-bottom: 1rem;
+    color: var(--health);
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+  .hero-section {
+    background: radial-gradient(
+      ellipse at 85% 40%,
+      var(--health-soft),
+      transparent 60%
+    );
+    border-bottom: 1px solid var(--border);
+  }
+  .hero-title {
+    font-size: clamp(2.5rem, 4.1vw, 3.9rem);
+    line-height: 1.14;
+    letter-spacing: -0.045em;
+  }
+  .section-heading {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .search-panel {
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    border-top: 3px solid var(--gold);
+  }
+  .category-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.5rem 0.6rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    transition:
+      border-color 180ms ease,
+      box-shadow 180ms ease,
+      transform 180ms ease;
+    cursor: pointer;
+  }
+  .category-card:hover,
+  .category-card:focus-visible {
+    border-color: color-mix(in srgb, var(--health) 35%, var(--border));
+    box-shadow: var(--shadow-card);
+    transform: translateY(-2px);
+  }
+  .category-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 1rem;
+    color: var(--health);
+    background: var(--health-soft);
+  }
+  .promotion {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 2rem;
+    padding: clamp(2rem, 5vw, 3.5rem);
+    background:
+      radial-gradient(ellipse at right bottom, var(--health), transparent 70%),
+      var(--brand);
+    color: var(--surface);
+    border-radius: var(--radius-card);
+  }
+  .promotion .eyebrow {
+    color: var(--gold);
+  }
+  .editorial {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(2rem, 4vw, 3rem);
+    border-radius: var(--radius-card);
+  }
+  .editorial-symbol {
+    position: absolute;
+    bottom: -5rem;
+    right: -1rem;
+    font-size: 21rem;
+    line-height: 1;
+    opacity: 0.09;
+  }
+  .step {
+    padding: 1rem 2rem;
+    border-left: 1px solid var(--border);
+  }
+  .step-number {
+    color: var(--health);
+    font-family: var(--font-montserrat);
+    font-size: 2.5rem;
+    font-weight: 500;
+  }
+  .final-cta {
+    padding: clamp(2rem, 5vw, 4rem);
+    text-align: center;
+    border-radius: 2rem;
+    background: var(--health-soft);
+    border: 1px solid var(--border);
+  }
+  .product-composition {
+    position: relative;
+    height: 460px;
+    max-width: 550px;
+    width: 100%;
+    margin-inline: auto;
+  }
+  .composition-orbit {
+    position: absolute;
+    width: 85%;
+    aspect-ratio: 1;
+    border-radius: 48% 48% 40% 60%;
+    right: 0;
+    top: 0;
+    background: var(--health-soft);
+    border: 1px solid var(--health);
+    opacity: 0.25;
+  }
+  .concept-box {
+    position: absolute;
+    width: 41%;
+    height: 68%;
+    left: 15%;
+    top: 8%;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 0.8rem;
+    box-shadow: 16px 24px 40px rgb(11 61 74 / 12%);
+    transform: rotate(-9deg);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+  }
+  .concept-box strong,
+  .concept-bottle strong {
+    color: var(--brand);
+    font-family: var(--font-montserrat);
+    font-size: 1.35rem;
+  }
+  .concept-box > span:not(:first-child),
+  .concept-bottle > span {
+    font-size: 0.55rem;
+    letter-spacing: 0.15em;
+    color: var(--health);
+  }
+  .concept-box small,
+  .concept-bottle small {
+    font-size: 0.7rem;
+    line-height: 1.7;
+    color: var(--muted);
+  }
+  .concept-stripe {
+    height: 4rem;
+    background: var(--health-soft);
+    border-top: 2px solid var(--gold);
+    margin-inline: -1.5rem;
+  }
+  .concept-bottle {
+    position: absolute;
+    width: 32%;
+    height: 55%;
+    right: 11%;
+    top: 28%;
+    border: 1px solid var(--border);
+    border-radius: 2rem 2rem 1.2rem 1.2rem;
+    background: linear-gradient(
+      90deg,
+      var(--health-soft),
+      var(--surface) 40%,
+      var(--health-soft)
+    );
+    transform: rotate(9deg);
+    box-shadow: 12px 20px 30px rgb(11 61 74 / 10%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.7rem;
+    color: var(--health);
+  }
+  .bottle-cap {
+    position: absolute;
+    width: 70%;
+    height: 2.5rem;
+    top: -2rem;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--brand) 0 3px,
+      var(--brand-hover) 3px 5px
+    );
+  }
+  .composition-note {
+    position: absolute;
+    bottom: 1.5rem;
+    left: 5%;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 1rem;
+    background: var(--surface);
+    box-shadow: var(--shadow-card);
+  }
+  .composition-note strong {
+    display: block;
+    color: var(--brand);
+    font-size: 0.8rem;
+  }
+  .composition-note small {
+    display: block;
+    color: var(--muted);
+    font-size: 0.65rem;
+    margin-top: 0.25rem;
+  }
+  .composition-caption {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    font-size: 0.5rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+  }
+}
+@layer base {
+  [id] {
+    scroll-margin-top: 7rem;
+  }
+}
+@media (max-width: 1100px) {
+  .desktop-nav {
+    display: none;
+  }
+  .menu-toggle {
+    display: block;
+  }
+}
+@media (min-width: 1101px) {
+  .mobile-nav {
+    display: none;
+  }
+}
+@media (max-width: 480px) {
+  .site-header .brand-logo {
+    width: 10rem;
+  }
+  .cart-link {
+    padding-inline: 0.65rem;
+  }
+  .product-composition {
+    height: 350px;
+  }
+  .concept-box {
+    padding: 1rem;
+  }
+  .concept-box strong,
+  .concept-bottle strong {
+    font-size: 1rem;
+  }
+  .concept-stripe {
+    margin-inline: -1rem;
+    height: 2.5rem;
+  }
+  .composition-note {
+    left: 0;
+    padding: 0.75rem;
+  }
 }
