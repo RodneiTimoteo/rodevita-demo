@@ -3,8 +3,10 @@ import type { Produto } from "@/data/produtos";
 export function ProductCard({
   produto,
   onAdd,
+  quantidade,
 }: {
   produto: Produto;
+  quantidade?: number;
   onAdd: (produto: Produto) => void;
 }) {
   return (
@@ -17,6 +19,13 @@ export function ProductCard({
       <div className="mb-6 mt-5">
         <Badge variant={produto.exigeReceita ? "prescription" : "free"} />
       </div>
+      {quantidade !== undefined && (
+        <p className="mb-3 text-xs font-medium text-health">
+          {quantidade > 0
+            ? `${quantidade} na sua lista de orçamento`
+            : "Adicione à sua lista"}
+        </p>
+      )}
       <Button onClick={() => onAdd(produto)} className="mt-auto w-full">
         Adicionar ao orçamento
       </Button>

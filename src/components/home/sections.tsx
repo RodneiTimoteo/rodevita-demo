@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   Button,
   Card,
@@ -85,9 +87,9 @@ function Icon({ index = 0 }: { index?: number }) {
 function Actions() {
   return (
     <div className="mt-8 flex flex-wrap gap-3">
-      <a className={buttonStyles()} href="#catalogo">
+      <Link className={buttonStyles()} href="/produtos">
         Explorar produtos <span aria-hidden="true">↗</span>
-      </a>
+      </Link>
       <a
         className={buttonStyles("secondary")}
         href={whatsapp}
@@ -164,6 +166,7 @@ export function LandingIntro({
   erro: string | null;
   onAdd: (produto: Produto) => void;
 }) {
+  const router = useRouter();
   return (
     <>
       <section className="hero-section">
@@ -207,7 +210,9 @@ export function LandingIntro({
             className="mt-5 flex flex-col gap-3 sm:flex-row"
             onSubmit={(event) => {
               event.preventDefault();
-              document.getElementById("catalogo")?.scrollIntoView();
+              router.push(
+                `/produtos?busca=${encodeURIComponent(busca.trim())}`,
+              );
             }}
           >
             <SearchField
@@ -230,8 +235,9 @@ export function LandingIntro({
                   key={produto.id}
                   className="rounded-lg bg-brand-soft px-3 py-2 text-left text-sm text-brand"
                   onClick={() => {
-                    onSearch(produto.nome);
-                    document.getElementById("catalogo")?.scrollIntoView();
+                    router.push(
+                      `/produtos?busca=${encodeURIComponent(produto.nome)}`,
+                    );
                   }}
                 >
                   {produto.nome} · {produto.dosagem}
@@ -308,9 +314,12 @@ export function LandingIntro({
               minutos.
             </p>
           </div>
-          <a className={buttonStyles("secondary", "shrink-0")} href="#catalogo">
+          <Link
+            className={buttonStyles("secondary", "shrink-0")}
+            href="/produtos"
+          >
             Ver produtos ↗
-          </a>
+          </Link>
         </section>
       </Container>
       <Container className="py-14">
@@ -321,9 +330,9 @@ export function LandingIntro({
               Produtos em destaque
             </SectionTitle>
           </div>
-          <a className="text-sm font-semibold text-health" href="#catalogo">
+          <Link className="text-sm font-semibold text-health" href="/produtos">
             Ver todos os produtos ↗
-          </a>
+          </Link>
         </div>
         {carregando ? (
           <p role="status">Carregando destaques...</p>
@@ -503,9 +512,9 @@ export function FinalCta() {
           WhatsApp.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <a href="#catalogo" className={buttonStyles()}>
+          <Link href="/produtos" className={buttonStyles()}>
             Explorar catálogo ↗
-          </a>
+          </Link>
           <a
             href={whatsapp}
             target="_blank"

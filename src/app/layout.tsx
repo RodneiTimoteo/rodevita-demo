@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Montserrat } from "next/font/google";
-import { Footer } from "@/components/site-shell";
+import { CatalogProvider } from "@/components/catalog/catalog-provider";
+import { Header, Footer } from "@/components/site-shell";
 import "./globals.css";
 
 const inter = Inter({
@@ -29,8 +30,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <a href="#catalogo" className="skip-link">
           Pular para o catálogo
         </a>
-        {children}
-        <Footer />
+        <CatalogProvider>
+          <Header />
+          {children}
+          <Footer />
+        </CatalogProvider>
       </body>
     </html>
   );

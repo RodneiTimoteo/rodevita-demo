@@ -1,5 +1,6 @@
 "use client";
 
+import { useCatalog } from "@/components/catalog/catalog-provider";
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -30,7 +31,8 @@ const navigation = [
   ["Sobre", "sobre"],
   ["Contato", "contato"],
 ];
-export function Header({ quantidade = 0 }: { quantidade?: number }) {
+export function Header() {
+  const { quantidadeTotal: quantidade } = useCatalog();
   const [aberto, setAberto] = useState(false);
   return (
     <header className="site-header">
@@ -38,9 +40,9 @@ export function Header({ quantidade = 0 }: { quantidade?: number }) {
         <BrandLogo />
         <nav aria-label="Navegação principal" className="desktop-nav">
           {navigation.map(([label, id]) => (
-            <a key={id} href={"#" + id}>
+            <Link key={id} href={id === "catalogo" ? "/produtos" : "/#" + id}>
               {label}
-            </a>
+            </Link>
           ))}
         </nav>
         <div className="flex items-center gap-2">
@@ -79,9 +81,13 @@ export function Header({ quantidade = 0 }: { quantidade?: number }) {
           hidden={!aberto}
         >
           {navigation.map(([label, id]) => (
-            <a key={id} href={"#" + id} onClick={() => setAberto(false)}>
+            <Link
+              key={id}
+              href={id === "catalogo" ? "/produtos" : "/#" + id}
+              onClick={() => setAberto(false)}
+            >
               {label}
-            </a>
+            </Link>
           ))}
         </nav>
       </Container>
@@ -102,7 +108,7 @@ export function Footer() {
             lista de produtos.
           </p>
           <a
-            href="#catalogo"
+            href="/produtos"
             className="mt-4 inline-block font-semibold text-health"
           >
             Voltar ao catálogo ↑
@@ -115,9 +121,9 @@ export function Footer() {
           className="flex flex-wrap gap-x-6 gap-y-3 text-sm font-semibold text-brand"
         >
           {navigation.slice(1).map(([label, id]) => (
-            <a href={"#" + id} key={id}>
+            <Link href={id === "catalogo" ? "/produtos" : "/#" + id} key={id}>
               {label}
-            </a>
+            </Link>
           ))}
         </nav>
         <p className="mt-6 text-sm text-muted">
