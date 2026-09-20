@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { productSlug } from "@/utils/slug";
 import { Badge, Button, Card } from "@/components/ui";
 import type { Produto } from "@/data/produtos";
 export function ProductCard({
@@ -14,7 +16,15 @@ export function ProductCard({
       <span className="text-xs font-semibold uppercase tracking-wide text-health">
         {produto.categoria}
       </span>
-      <h3 className="mt-3 text-xl font-bold">{produto.nome}</h3>
+      <h3 className="mt-3 text-xl font-bold">
+        <Link
+          href={`/produtos/${productSlug(produto)}`}
+          className="rounded-sm transition-colors hover:text-health"
+          aria-label={`Ver ${produto.nome} ${produto.dosagem}`}
+        >
+          {produto.nome}
+        </Link>
+      </h3>
       <p className="mt-1 text-muted">{produto.dosagem}</p>
       <div className="mb-6 mt-5">
         <Badge variant={produto.exigeReceita ? "prescription" : "free"} />

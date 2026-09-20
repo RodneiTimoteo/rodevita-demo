@@ -1,3 +1,4 @@
+import { whatsappUrl } from "@/utils/whatsapp";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -11,7 +12,7 @@ import {
 import type { Produto } from "@/data/produtos";
 import { ProductCard } from "./product-card";
 
-const whatsapp = "https://wa.me/5511973288576";
+const whatsapp = whatsappUrl();
 const categories = [
   "Dor e Febre",
   "Gripe e Resfriado",

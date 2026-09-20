@@ -7,28 +7,8 @@ import {
   type ReactNode,
 } from "react";
 import type { Produto } from "@/data/produtos";
-const URL_PRODUTOS =
-  "https://script.google.com/macros/s/AKfycbzW9i1xHF_fG-hES1yWNi0bZl-L05Bf9NjhVuUJJuAdT_cc72KK5GrFQM06RZzusKp5zg/exec";
-
-type ProdutoApi = Produto & {
-  disponivel: boolean;
-};
-
-function ehProdutoApi(valor: unknown): valor is ProdutoApi {
-  if (typeof valor !== "object" || valor === null) return false;
-
-  const produto = valor as Record<string, unknown>;
-  return (
-    typeof produto.id === "number" &&
-    Number.isFinite(produto.id) &&
-    typeof produto.nome === "string" &&
-    typeof produto.dosagem === "string" &&
-    typeof produto.categoria === "string" &&
-    typeof produto.exigeReceita === "boolean" &&
-    typeof produto.disponivel === "boolean"
-  );
-}
-
+import { fetchProducts, type ProdutoApi } from "@/services/products";
+import { whatsappUrl } from "@/utils/whatsapp";
 function mesmoProduto(a: Produto, b: Produto): boolean {
   return a.id === b.id && a.nome === b.nome && a.dosagem === b.dosagem;
 }
@@ -60,23 +40,19 @@ function useCatalogState() {
 
     async function carregarProdutos() {
       try {
-        const resposta = await fetch(URL_PRODUTOS, {
-          signal: controller.signal,
-          cache: "no-store",
-        });
-
-        if (!resposta.ok) throw new Error("Falha ao carregar o catálogo");
-
-        const dados: unknown = await resposta.json();
-        if (!Array.isArray(dados) || !dados.every(ehProdutoApi)) {
-          throw new Error("Formato de catálogo inválido");
-        }
-
+        const dados = await fetchProducts(controller.signal);
+        if (ativo) setProdutos(dados);
+      } catch (error) {
         if (ativo) {
-          setProdutos(dados.filter((produto) => produto.disponivel === true));
-        }
-      } catch {
-        if (ativo) {
+          console.error("[RodeVita] Falha ao consultar a API de produtos", {
+            tipo: controller.signal.aborted
+              ? "timeout"
+              : error instanceof Error
+                ? error.name
+                : "desconhecido",
+            detalhe:
+              error instanceof Error ? error.message : "Falha desconhecida",
+          });
           setErroProdutos(
             "Não foi possível carregar os produtos agora. Tente atualizar a página em alguns instantes. Os itens do seu carrinho foram mantidos.",
           );
@@ -174,8 +150,6 @@ function useCatalogState() {
   function solicitarOrcamento() {
     if (carrinho.length === 0) return;
 
-    const numeroWhatsApp = "5511973288576";
-
     const itens = carrinho
       .map(
         (item) =>
@@ -197,9 +171,7 @@ ${
     : ""
 }Aguardo o retorno. Obrigado!`;
 
-    const url = `https://wa.me/${numeroWhatsApp}?text=${encodeURIComponent(
-      mensagem,
-    )}`;
+    const url = whatsappUrl(mensagem);
 
     window.open(url, "_blank");
     setMostrarConfirmacao(true);

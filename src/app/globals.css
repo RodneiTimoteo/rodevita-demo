@@ -642,3 +642,48 @@
     width: 8.5rem;
   }
 }
+
+@layer components {
+  .product-visual {
+    position: relative;
+    overflow: hidden;
+    border: 1px solid var(--border);
+    border-radius: 2rem;
+    background: var(--health-soft);
+    padding: clamp(2rem, 5vw, 4rem);
+  }
+  .product-visual-shape {
+    position: absolute;
+    width: 90%;
+    aspect-ratio: 1;
+    left: 20%;
+    top: 8%;
+    border-radius: 48% 52% 65% 35%;
+    border: 1px solid var(--health);
+    opacity: 0.15;
+  }
+  .product-mockup {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: min(100%, 17rem);
+    min-height: 20rem;
+    margin: auto;
+    padding: 1.75rem;
+    border-radius: 0.75rem;
+    border: 1px solid var(--border);
+    border-right: 10px solid var(--brand-soft);
+    background: var(--surface);
+    box-shadow: 14px 20px 30px rgb(11 61 74 / 10%);
+  }
+  .product-monogram {
+    margin: 1.75rem -1.75rem;
+    padding: 1rem 1.75rem;
+    border-top: 2px solid var(--gold);
+    background: var(--health-soft);
+    font-family: var(--font-montserrat);
+    font-size: 2.5rem;
+    font-weight: 600;
+    color: var(--health);
+  }
+}

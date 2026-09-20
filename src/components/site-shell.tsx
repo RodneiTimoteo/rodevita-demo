@@ -107,12 +107,12 @@ export function Footer() {
             Explore o catálogo e solicite seu orçamento pelo WhatsApp na sua
             lista de produtos.
           </p>
-          <a
+          <Link
             href="/produtos"
             className="mt-4 inline-block font-semibold text-health"
           >
             Voltar ao catálogo ↑
-          </a>
+          </Link>
         </div>
       </Container>
       <Container className="border-t border-border py-8">
