@@ -1,6 +1,5 @@
-import { whatsappUrl } from "@/utils/whatsapp";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { whatsappUrl } from "@/utils/whatsapp";
 import {
   Button,
   Card,
@@ -23,8 +22,8 @@ const categories = [
   "Primeiros Socorros",
   "Alergia",
 ];
+
 const categoryPaths: Record<string, string> = {
-  // Termômetro, caixa de lenços, cápsula, sabonete, creme, bebê, maleta e flor.
   "Dor e Febre":
     "M9 14.5V5a3 3 0 0 1 6 0v9.5a5 5 0 1 1-6 0ZM12 8v9m0 0a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3M17 6h2m-2 4h2",
   "Gripe e Resfriado":
@@ -42,7 +41,17 @@ const categoryPaths: Record<string, string> = {
   Alergia:
     "M12 9c-5-7 5-7 0 0Zm3 3c7-5 7 5 0 0Zm-3 3c5 7-5 7 0 0Zm-3-3c-7 5-7-5 0 0Zm3-3a3 3 0 1 1 0 6 3 3 0 0 1 0-6ZM18 3h.01M21 6h.01",
 };
-function CategoryIcon({ category }: { category: string }) {
+
+const iconPaths = [
+  "M12 3v18M3 12h18",
+  "M8 3v6l-4 8a3 3 0 0 0 3 4h10a3 3 0 0 0 3-4l-4-8V3M7 3h10M7 15h10",
+  "M12 21V10M12 14C3 14 3 6 3 6s9-1 9 8Zm0-4C12 3 21 3 21 3s0 8-9 7Z",
+  "M12 3C9 8 5 11 5 15a7 7 0 0 0 14 0c0-4-4-7-7-12Z",
+  "M12 21s-9-5-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 7-9 12-9 12Z",
+  "M5 8a7 7 0 0 1 14 0M4 8h16v6a8 8 0 0 1-16 0V8ZM8 13h.01M16 13h.01M9 17q3 2 6 0",
+];
+
+function LineIcon({ path }: { path: string }) {
   return (
     <svg
       aria-hidden="true"
@@ -56,36 +65,16 @@ function CategoryIcon({ category }: { category: string }) {
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d={categoryPaths[category]} />
+      <path d={path} />
     </svg>
   );
 }
+
 function Icon({ index = 0 }: { index?: number }) {
-  const paths = [
-    "M12 3v18M3 12h18",
-    "M8 3v6l-4 8a3 3 0 0 0 3 4h10a3 3 0 0 0 3-4l-4-8V3M7 3h10M7 15h10",
-    "M12 21V10M12 14C3 14 3 6 3 6s9-1 9 8Zm0-4C12 3 21 3 21 3s0 8-9 7Z",
-    "M12 3C9 8 5 11 5 15a7 7 0 0 0 14 0c0-4-4-7-7-12Z",
-    "M12 21s-9-5-9-12a5 5 0 0 1 9-3 5 5 0 0 1 9 3c0 7-9 12-9 12Z",
-    "M5 8a7 7 0 0 1 14 0M4 8h16v6a8 8 0 0 1-16 0V8ZM8 13h.01M16 13h.01M9 17q3 2 6 0",
-  ];
-  return (
-    <svg
-      aria-hidden="true"
-      width="28"
-      height="28"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="1.5"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d={paths[index % paths.length]} />
-    </svg>
-  );
+  return <LineIcon path={iconPaths[index % iconPaths.length]} />;
 }
-function Actions() {
+
+function HeroActions() {
   return (
     <div className="mt-8 flex flex-wrap gap-3">
       <Link className={buttonStyles()} href="/produtos">
@@ -102,12 +91,10 @@ function Actions() {
     </div>
   );
 }
-function ProductComposition({ compact = false }: { compact?: boolean }) {
+
+function ProductComposition() {
   return (
-    <div
-      className={`product-composition ${compact ? "composition-small" : ""}`}
-      aria-hidden="true"
-    >
+    <div className="product-composition" aria-hidden="true">
       <div className="composition-orbit" />
       <div className="concept-box">
         <span className="text-health">
@@ -148,72 +135,64 @@ function ProductComposition({ compact = false }: { compact?: boolean }) {
     </div>
   );
 }
-export function LandingIntro({
-  produtos,
+
+export function Hero() {
+  return (
+    <section id="inicio" className="hero-section">
+      <Container className="grid items-center gap-8 py-14 lg:grid-cols-2 lg:py-20">
+        <div>
+          <p className="eyebrow">Saúde e bem-estar para toda a família</p>
+          <SectionTitle as="h1" className="hero-title">
+            Cuidado que está sempre{" "}
+            <span className="text-health">perto de você.</span>
+          </SectionTitle>
+          <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
+            Encontre medicamentos, higiene, beleza e produtos para toda a
+            família de forma simples, rápida e prática.
+          </p>
+          <HeroActions />
+          <div className="mt-9 flex flex-wrap gap-x-5 gap-y-3 border-t border-border pt-6 text-xs font-medium text-brand">
+            {["Catálogo digital", "Atendimento próximo", "Orçamento pelo WhatsApp"].map(
+              (text) => (
+                <span key={text}>✓ {text}</span>
+              ),
+            )}
+          </div>
+        </div>
+        <ProductComposition />
+      </Container>
+    </section>
+  );
+}
+
+export function HomeSearch({
   busca,
   onSearch,
+  onSubmit,
   sugestoes,
-  onSelect,
   carregando,
   erro,
-  onAdd,
 }: {
-  produtos: Produto[];
   busca: string;
   onSearch: (value: string) => void;
+  onSubmit: (value: string) => void;
   sugestoes: Produto[];
-  onSelect: (value: string) => void;
   carregando: boolean;
   erro: string | null;
-  onAdd: (produto: Produto) => void;
 }) {
-  const router = useRouter();
   return (
-    <>
-      <section className="hero-section">
-        <Container className="grid items-center gap-8 py-14 lg:grid-cols-2 lg:py-20">
-          <div>
-            <p className="eyebrow">Saúde e bem-estar para toda a família</p>
-            <SectionTitle as="h1" className="hero-title">
-              Cuidado que está sempre{" "}
-              <span className="text-health">perto de você.</span>
-            </SectionTitle>
-            <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
-              Encontre medicamentos, higiene, beleza e produtos para toda a
-              família de forma simples, rápida e prática.
-            </p>
-            <Actions />
-            <div className="mt-9 flex flex-wrap gap-x-5 gap-y-3 border-t border-border pt-6 text-xs font-medium text-brand">
-              {[
-                "Catálogo digital",
-                "Atendimento próximo",
-                "Orçamento pelo WhatsApp",
-              ].map((text) => (
-                <span key={text}>✓ {text}</span>
-              ))}
-            </div>
-          </div>
-          <ProductComposition />
-        </Container>
-      </section>
-      <Container className="py-10">
-        <section
-          className="ui-card search-panel"
-          aria-labelledby="busca-titulo"
-        >
-          <div>
-            <p className="eyebrow">Seu cuidado a poucos cliques de distância</p>
-            <SectionTitle id="busca-titulo" className="text-2xl">
-              O que você está procurando?
-            </SectionTitle>
-          </div>
+    <section className="bg-surface" aria-labelledby="busca-titulo">
+      <Container className="py-16 md:py-20">
+        <div className="search-panel mx-auto max-w-4xl rounded-3xl bg-background shadow-sm">
+          <p className="eyebrow">Seu cuidado a poucos cliques de distância</p>
+          <SectionTitle id="busca-titulo" className="text-2xl md:text-3xl">
+            O que você está procurando?
+          </SectionTitle>
           <form
-            className="mt-5 flex flex-col gap-3 sm:flex-row"
+            className="mt-6 flex flex-col gap-3 sm:flex-row"
             onSubmit={(event) => {
               event.preventDefault();
-              router.push(
-                `/produtos?busca=${encodeURIComponent(busca.trim())}`,
-              );
+              onSubmit(busca);
             }}
           >
             <SearchField
@@ -227,19 +206,13 @@ export function LandingIntro({
             </Button>
           </form>
           {busca.trim() && (
-            <div
-              className="mt-4 flex flex-wrap gap-2"
-              aria-label="Sugestões de produtos"
-            >
+            <div className="mt-4 flex flex-wrap gap-2" aria-label="Sugestões de produtos">
               {sugestoes.map((produto) => (
                 <button
-                  key={produto.id}
-                  className="rounded-lg bg-brand-soft px-3 py-2 text-left text-sm text-brand"
-                  onClick={() => {
-                    router.push(
-                      `/produtos?busca=${encodeURIComponent(produto.nome)}`,
-                    );
-                  }}
+                  key={`${produto.id}-${produto.nome}-${produto.dosagem}`}
+                  type="button"
+                  className="rounded-lg bg-brand-soft px-3 py-2 text-left text-sm text-brand hover:text-health"
+                  onClick={() => onSubmit(produto.nome)}
                 >
                   {produto.nome} · {produto.dosagem}
                 </button>
@@ -250,282 +223,327 @@ export function LandingIntro({
                   : erro
                     ? "Sugestões indisponíveis no momento."
                     : sugestoes.length === 0
-                      ? "Nenhum produto encontrado com os filtros atuais."
-                      : "Selecione uma sugestão para consultar no catálogo."}
+                      ? "Nenhuma sugestão encontrada. Consulte o catálogo para ver todas as opções."
+                      : "Selecione uma sugestão ou continue sua busca no catálogo."}
               </p>
             </div>
           )}
-        </section>
+        </div>
       </Container>
-      <Container className="py-12">
-        <div id="categorias" className="section-heading">
+    </section>
+  );
+}
+
+export function CategorySection({
+  produtos,
+  carregando,
+  erro,
+  onSelect,
+}: {
+  produtos: Produto[];
+  carregando: boolean;
+  erro: string | null;
+  onSelect: (value: string) => void;
+}) {
+  return (
+    <section id="categorias" aria-labelledby="categorias-titulo">
+      <Container className="py-16 md:py-20">
+        <div className="section-heading">
           <div>
             <p className="eyebrow">Para cada momento, um cuidado</p>
-            <SectionTitle className="text-3xl">
+            <SectionTitle id="categorias-titulo" className="text-3xl">
               Encontre por categoria
             </SectionTitle>
             <p className="mt-3 text-muted">
               Explore produtos organizados para facilitar sua busca.
             </p>
           </div>
-          <button
-            className="text-sm font-semibold text-health"
-            onClick={() => onSelect("Todos")}
-          >
+          <Link className={buttonStyles("secondary")} href="/produtos">
             Ver todas as categorias ↗
-          </button>
+          </Link>
         </div>
         <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-8">
-          {categories.map((category) => (
-            <button
-              key={category}
-              type="button"
-              className="category-card"
-              onClick={() => onSelect(category)}
-            >
-              <span className="category-icon">
-                <CategoryIcon category={category} />
-              </span>
-              <span className="text-sm font-semibold">{category}</span>
-              <span className="mt-auto pt-3 text-xs text-muted">
-                {carregando
-                  ? "Carregando..."
-                  : erro
-                    ? "Consultar catálogo"
-                    : `${produtos.filter((p) => p.categoria.trim() === category).length} produtos`}
-              </span>
-            </button>
-          ))}
+          {categories.map((category) => {
+            const count = produtos.filter(
+              (produto) => produto.categoria.trim() === category,
+            ).length;
+            return (
+              <button
+                key={category}
+                type="button"
+                className="category-card"
+                onClick={() => onSelect(category)}
+                aria-label={`Explorar ${category}${!carregando && !erro ? `, ${count} produtos` : ""}`}
+              >
+                <span className="category-icon">
+                  <LineIcon path={categoryPaths[category]} />
+                </span>
+                <span className="text-sm font-semibold">{category}</span>
+                <span className="mt-auto pt-3 text-xs text-muted">
+                  {carregando
+                    ? "Carregando..."
+                    : erro
+                      ? "Consultar catálogo"
+                      : `${count} ${count === 1 ? "produto" : "produtos"}`}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </Container>
-      <Container className="py-8">
-        <section id="ofertas" className="promotion">
-          <div>
-            <p className="eyebrow text-gold">
-              Uma semana para se cuidar · campanha fictícia
-            </p>
-            <SectionTitle className="text-3xl text-surface md:text-4xl">
-              Semana da Saúde
-            </SectionTitle>
-            <p className="mt-3 text-xl">
-              Cuidados para toda a família em um só lugar.
-            </p>
-            <p className="mt-3 text-sm text-surface/80">
-              Explore nosso catálogo digital e monte sua lista em poucos
-              minutos.
-            </p>
-          </div>
-          <Link
-            className={buttonStyles("secondary", "shrink-0")}
-            href="/produtos"
-          >
-            Ver produtos ↗
-          </Link>
-        </section>
-      </Container>
-      <Container className="py-14">
+    </section>
+  );
+}
+
+export function FeaturedProducts({
+  produtos,
+  carregando,
+  erro,
+  onAdd,
+  getQuantity,
+}: {
+  produtos: Produto[];
+  carregando: boolean;
+  erro: string | null;
+  onAdd: (produto: Produto) => void;
+  getQuantity: (produto: Produto) => number;
+}) {
+  return (
+    <section className="bg-surface" aria-labelledby="destaques-titulo">
+      <Container className="py-16 md:py-20">
         <div className="section-heading">
           <div>
             <p className="eyebrow">Uma seleção para o seu dia</p>
-            <SectionTitle className="text-3xl">
+            <SectionTitle id="destaques-titulo" className="text-3xl">
               Produtos em destaque
             </SectionTitle>
+            <p className="mt-3 text-muted">
+              Algumas opções do nosso catálogo demonstrativo.
+            </p>
           </div>
-          <Link className="text-sm font-semibold text-health" href="/produtos">
-            Ver todos os produtos ↗
-          </Link>
         </div>
         {carregando ? (
-          <p role="status">Carregando destaques...</p>
+          <p role="status" className="text-sm text-muted">
+            Carregando destaques...
+          </p>
         ) : erro ? (
-          <p role="status">Os destaques estão indisponíveis no momento.</p>
+          <p role="alert" className="rounded-2xl bg-warning-soft p-6 text-warning">
+            Os destaques estão indisponíveis no momento. O catálogo pode ser
+            consultado diretamente.
+          </p>
         ) : produtos.length === 0 ? (
-          <p>Nenhum destaque disponível no momento.</p>
+          <p className="text-muted">Nenhum destaque disponível no momento.</p>
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {produtos.slice(0, 6).map((produto) => (
-              <ProductCard key={produto.id} produto={produto} onAdd={onAdd} />
+            {produtos.map((produto) => (
+              <ProductCard
+                key={`${produto.id}-${produto.nome}-${produto.dosagem}`}
+                produto={produto}
+                onAdd={onAdd}
+                quantidade={getQuantity(produto)}
+              />
             ))}
           </div>
         )}
+        <div className="mt-10 text-center">
+          <Link className={buttonStyles()} href="/produtos">
+            Ver catálogo completo ↗
+          </Link>
+        </div>
       </Container>
-    </>
+    </section>
   );
 }
-export function EditorialSections({
-  onSelect,
-}: {
-  onSelect: (value: string) => void;
-}) {
+
+export function EditorialSection() {
   return (
-    <Container className="grid gap-6 py-10 lg:grid-cols-2">
-      <section className="editorial bg-health-soft">
-        <span className="editorial-symbol text-health" aria-hidden="true">
-          ♡
-        </span>
-        <p className="eyebrow">Mamãe & bebê</p>
-        <SectionTitle className="relative max-w-sm text-3xl">
-          Todo cuidado para os pequenos
-        </SectionTitle>
-        <p className="relative mt-4 max-w-xs leading-relaxed text-muted">
-          Produtos para higiene, conforto e cuidado em cada fase.
-        </p>
-        <Button
-          className="relative mt-8"
-          onClick={() => onSelect("Mamãe e Bebê")}
-        >
-          Ver Mamãe e Bebê ↗
-        </Button>
-      </section>
-      <section className="editorial bg-brand-soft">
-        <span className="editorial-symbol text-brand" aria-hidden="true">
-          ✳
-        </span>
-        <p className="eyebrow">Seu momento de cuidado</p>
-        <SectionTitle className="relative max-w-sm text-3xl">
-          Bem-estar também é cuidar de você.
-        </SectionTitle>
-        <div className="relative mt-5 flex max-w-sm flex-wrap gap-2">
-          {[
-            "Cuidados com a Pele",
-            "Higiene Pessoal",
-            "Cabelos",
-            "Vitaminas e Suplementos",
-          ].map((c) => (
-            <button
-              className="rounded-full border border-brand/15 bg-surface/60 px-3 py-2 text-xs text-brand"
-              key={c}
-              onClick={() => onSelect(c)}
-            >
-              {c}
-            </button>
+    <section className="bg-health-soft" aria-labelledby="editorial-titulo">
+      <Container className="grid gap-6 py-16 md:py-20 lg:grid-cols-2">
+        <article className="editorial bg-surface">
+          <span className="editorial-symbol text-health" aria-hidden="true">
+            ♡
+          </span>
+          <p className="eyebrow">Mamãe & bebê</p>
+          <SectionTitle id="editorial-titulo" className="relative max-w-sm text-3xl">
+            Todo cuidado para os pequenos
+          </SectionTitle>
+          <p className="relative mt-4 max-w-sm leading-relaxed text-muted">
+            Produtos para higiene, conforto e cuidado em cada fase.
+          </p>
+          <Link
+            className={buttonStyles("primary", "relative mt-8")}
+            href="/produtos?categoria=Mam%C3%A3e%20e%20Beb%C3%AA"
+          >
+            Explorar Mamãe e Bebê ↗
+          </Link>
+        </article>
+        <article className="editorial bg-brand-soft">
+          <span className="editorial-symbol text-brand" aria-hidden="true">
+            ✳
+          </span>
+          <p className="eyebrow">Cuidados e bem-estar</p>
+          <SectionTitle className="relative max-w-sm text-3xl">
+            Bem-estar também é cuidar de você.
+          </SectionTitle>
+          <p className="relative mt-4 max-w-sm leading-relaxed text-muted">
+            Uma seleção para transformar pequenos hábitos em momentos de
+            cuidado.
+          </p>
+          <Link
+            className={buttonStyles("secondary", "relative mt-8")}
+            href="/produtos?categoria=Cuidados%20com%20a%20Pele"
+          >
+            Explorar cuidados ↗
+          </Link>
+        </article>
+      </Container>
+    </section>
+  );
+}
+
+export function ServicesSummary() {
+  const services = [
+    ["Aferição de pressão", "Consulte informações e disponibilidade."],
+    ["Orientação farmacêutica", "Um canal próximo para esclarecer dúvidas."],
+    ["Entrega local", "Conheça o fluxo demonstrativo de entrega."],
+    ["Atendimento pelo WhatsApp", "Leve sua lista direto para a conversa."],
+  ];
+  return (
+    <section id="servicos" aria-labelledby="servicos-titulo">
+      <Container className="py-16 md:py-20">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Acolher também é cuidar</p>
+            <SectionTitle id="servicos-titulo" className="text-3xl">
+              Serviços perto de você
+            </SectionTitle>
+            <p className="mt-3 max-w-2xl text-muted">
+              Uma visão resumida dos serviços demonstrativos da RodeVita.
+            </p>
+          </div>
+          <Link className={buttonStyles("secondary")} href="/servicos">
+            Conhecer todos os serviços ↗
+          </Link>
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {services.map(([title, description], index) => (
+            <Card key={title} className="h-full">
+              <span className="category-icon">
+                <Icon index={index} />
+              </span>
+              <h3 className="mt-5 font-semibold text-brand">{title}</h3>
+              <p className="mt-3 text-sm leading-relaxed text-muted">
+                {description}
+              </p>
+            </Card>
           ))}
         </div>
-        <Button
-          className="relative mt-7"
-          onClick={() => onSelect("Cuidados com a Pele")}
-        >
-          Explorar cuidados ↗
-        </Button>
-      </section>
-    </Container>
+        <p className="mt-6 text-xs text-muted">
+          Serviços fictícios apresentados exclusivamente para demonstração.
+        </p>
+      </Container>
+    </section>
   );
 }
-export function ServiceSections() {
-  const services = [
-    "Aferição de pressão",
-    "Aferição de glicemia",
-    "Orientação farmacêutica",
-    "Aplicação de injetáveis",
-    "Entrega local",
-    "Atendimento pelo WhatsApp",
+
+export function HowItWorks() {
+  const steps = [
+    ["Encontre", "Pesquise o produto que precisa."],
+    ["Adicione", "Monte sua lista de orçamento."],
+    ["Solicite", "Envie sua lista pelo WhatsApp."],
   ];
+  return (
+    <section className="home-steps bg-brand text-surface" aria-labelledby="como-funciona-titulo">
+      <Container className="py-16 md:py-20">
+        <div className="max-w-2xl">
+          <p className="eyebrow text-gold">Como funciona</p>
+          <SectionTitle id="como-funciona-titulo" className="text-3xl text-surface md:text-4xl">
+            Simples do começo ao fim
+          </SectionTitle>
+          <p className="mt-4 text-surface/75">
+            Do primeiro clique à conversa, a RodeVita organiza sua jornada em
+            três etapas claras.
+          </p>
+        </div>
+        <ol className="mt-10 grid gap-5 md:grid-cols-3">
+          {steps.map(([title, text], index) => (
+            <li className="rounded-2xl bg-surface/8 p-7" key={title}>
+              <span className="font-heading text-3xl text-gold">0{index + 1}</span>
+              <h3 className="mt-5 text-xl font-bold text-surface">{title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-surface/75">{text}</p>
+            </li>
+          ))}
+        </ol>
+      </Container>
+    </section>
+  );
+}
+
+export function Differentials() {
   const benefits = [
-    "Atendimento próximo",
     "Catálogo digital",
+    "Atendimento próximo",
     "Facilidade pelo WhatsApp",
+    "Organização",
     "Produtos para toda a família",
-    "Informações organizadas",
     "Experiência simples",
   ];
   return (
-    <>
-      <Container className="py-16">
-        <section id="servicos">
-          <p className="eyebrow">Acolher também é cuidar</p>
-          <SectionTitle className="text-3xl">
-            Mais cuidado para você
+    <section id="sobre" className="bg-surface" aria-labelledby="diferenciais-titulo">
+      <Container className="grid gap-12 py-16 md:py-20 lg:grid-cols-[.8fr_1.2fr]">
+        <div>
+          <p className="eyebrow">Nossa essência</p>
+          <SectionTitle id="diferenciais-titulo" className="max-w-sm text-3xl">
+            Cuidado em cada detalhe
           </SectionTitle>
-          <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((s, i) => (
-              <Card key={s} className="flex items-center gap-4">
-                <span className="category-icon shrink-0">
-                  <Icon index={i} />
-                </span>
-                <h3 className="text-sm font-semibold">{s}</h3>
-              </Card>
-            ))}
-          </div>
-          <p className="mt-5 text-xs text-muted">
-            Os serviços apresentados fazem parte do projeto demonstrativo. Não
-            estão disponíveis para agendamento ou realização.
+          <p className="mt-5 max-w-sm leading-relaxed text-muted">
+            Uma experiência pensada para aproximar você do que precisa com
+            clareza, acolhimento e praticidade.
           </p>
-        </section>
-      </Container>
-      <section id="sobre" className="border-y border-border bg-surface">
-        <Container className="grid gap-12 py-16 lg:grid-cols-[1fr_1.3fr]">
-          <div>
-            <p className="eyebrow">Nossa essência</p>
-            <SectionTitle className="max-w-sm text-3xl">
-              Por que escolher a RodeVita?
-            </SectionTitle>
-            <p className="mt-5 max-w-sm leading-relaxed text-muted">
-              Cuidado para todos os dias. Uma experiência pensada para aproximar
-              você do que precisa, com clareza, acolhimento e praticidade.
-            </p>
-          </div>
-          <div className="grid gap-7 sm:grid-cols-2">
-            {benefits.map((b, i) => (
-              <div className="flex items-center gap-4" key={b}>
-                <span className="text-health">
-                  <Icon index={i} />
-                </span>
-                <h3 className="text-sm font-semibold">{b}</h3>
-              </div>
-            ))}
-          </div>
-        </Container>
-      </section>
-      <Container className="py-16">
-        <div className="text-center">
-          <p className="eyebrow">Simples do começo ao fim</p>
-          <SectionTitle className="text-3xl">
-            Seu orçamento em três passos
-          </SectionTitle>
         </div>
-        <div className="mt-10 grid gap-8 md:grid-cols-3">
-          {[
-            ["Encontre", "Pesquise o produto que precisa."],
-            ["Adicione", "Monte sua lista de orçamento."],
-            ["Solicite", "Envie tudo pelo WhatsApp."],
-          ].map(([title, text], i) => (
-            <div className="step" key={title}>
-              <span className="step-number">0{i + 1}</span>
-              <h3 className="mt-5 text-xl font-bold text-brand">{title}</h3>
-              <p className="mt-2 text-muted">{text}</p>
+        <div className="grid gap-x-8 gap-y-6 sm:grid-cols-2">
+          {benefits.map((benefit, index) => (
+            <div className="flex items-center gap-4" key={benefit}>
+              <span className="category-icon shrink-0">
+                <Icon index={index} />
+              </span>
+              <h3 className="text-sm font-semibold text-brand">{benefit}</h3>
             </div>
           ))}
         </div>
       </Container>
-    </>
+    </section>
   );
 }
+
 export function FinalCta() {
   return (
-    <Container className="py-16">
-      <section id="contato" className="final-cta">
-        <p className="eyebrow">RodeVita · Drogaria & Bem-estar</p>
-        <SectionTitle className="mx-auto max-w-2xl text-3xl md:text-4xl">
-          Encontre o que precisa de forma simples.
-        </SectionTitle>
-        <p className="mx-auto mt-5 max-w-xl leading-relaxed text-muted">
-          Pesquise produtos, monte sua lista e solicite atendimento pelo
-          WhatsApp.
-        </p>
-        <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link href="/produtos" className={buttonStyles()}>
-            Explorar catálogo ↗
-          </Link>
-          <a
-            href={whatsapp}
-            target="_blank"
-            rel="noopener noreferrer"
-            className={buttonStyles("whatsapp")}
-          >
-            Falar pelo WhatsApp
-          </a>
+    <section id="contato" className="bg-health-soft">
+      <Container className="py-16 md:py-20">
+        <div className="final-cta bg-surface">
+          <p className="eyebrow">RodeVita · Drogaria & Bem-estar</p>
+          <SectionTitle className="mx-auto max-w-2xl text-3xl md:text-4xl">
+            Encontre o que precisa de forma simples.
+          </SectionTitle>
+          <p className="mx-auto mt-5 max-w-xl leading-relaxed text-muted">
+            Pesquise produtos, monte sua lista e solicite atendimento pelo
+            WhatsApp.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Link href="/produtos" className={buttonStyles()}>
+              Explorar catálogo ↗
+            </Link>
+            <a
+              href={whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className={buttonStyles("whatsapp")}
+            >
+              Falar pelo WhatsApp
+            </a>
+          </div>
         </div>
-      </section>
-    </Container>
+      </Container>
+    </section>
   );
 }

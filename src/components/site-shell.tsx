@@ -19,6 +19,7 @@ function BrandLogo() {
         src={logo}
         alt="RodeVita — Drogaria & Bem-estar. Cuidado para todos os dias."
         sizes="280px"
+        loading="eager"
       />
     </Link>
   );
@@ -36,12 +37,7 @@ export function Header() {
   const { quantidadeTotal: quantidade } = useCatalog();
   const [aberto, setAberto] = useState(false);
   const pathname = usePathname();
-  const institutional = [
-    "/ofertas",
-    "/servicos",
-    "/sobre",
-    "/contato",
-  ].includes(pathname);
+  const cartHref = pathname === "/produtos" ? "#orcamento" : "/produtos#orcamento";
   return (
     <header className="site-header">
       <Container className="header-inner">
@@ -56,8 +52,10 @@ export function Header() {
         <div className="flex items-center gap-2">
           <Link
             className={buttonStyles("secondary", "cart-link")}
-            href={institutional ? "/produtos#orcamento" : "#orcamento"}
-            aria-label={"Meu orçamento: " + quantidade + " itens"}
+            href={cartHref}
+            aria-label={`Meu orçamento: ${quantidade} ${
+              quantidade === 1 ? "item" : "itens"
+            }`}
           >
             <svg
               aria-hidden="true"
