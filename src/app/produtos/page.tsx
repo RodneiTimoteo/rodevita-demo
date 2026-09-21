@@ -5,9 +5,10 @@ import { CatalogLoading } from "@/components/catalog/catalog-controls";
 import { Container } from "@/components/ui";
 
 export const metadata: Metadata = {
-  title: "Produtos | RodeVita Drogaria & Bem-estar",
+  title: "Produtos",
   description:
     "Explore o catálogo demonstrativo da RodeVita. Pesquise medicamentos, vitaminas, higiene, beleza e outros produtos.",
+  alternates: { canonical: "/produtos" },
 };
 export default function ProductsPage() {
   return (

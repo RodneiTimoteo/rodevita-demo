@@ -6,9 +6,10 @@ import {
   WhatsAppCta,
 } from "@/components/institutional/shared";
 export const metadata: Metadata = {
-  title: "Serviços | RodeVita Drogaria & Bem-estar",
+  title: "Serviços",
   description:
     "Conheça os serviços demonstrativos da RodeVita. Conteúdo fictício para apresentar a experiência digital de uma drogaria, sem atendimento real.",
+  alternates: { canonical: "/servicos" },
 };
 const services = [
   {

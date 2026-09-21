@@ -6,9 +6,10 @@ import {
   InstitutionalIcon,
 } from "@/components/institutional/shared";
 export const metadata: Metadata = {
-  title: "Sobre a RodeVita | Drogaria & Bem-estar",
+  title: "Sobre a RodeVita",
   description:
     "Conheça a RodeVita, marca fictícia e projeto conceitual da RODE Soluções Inteligentes para demonstrar soluções digitais para farmácias.",
+  alternates: { canonical: "/sobre" },
 };
 const pillars = [
   {

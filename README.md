@@ -1,36 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# RodeVita
 
-## Getting Started
+Projeto demonstrativo de uma experiência digital para drogaria e bem-estar,
+desenvolvido pela RODE Soluções Inteligentes. O site reúne catálogo, busca,
+categorias, lista de orçamento e integração com WhatsApp.
 
-First, run the development server:
+Produtos, serviços, endereços e contatos apresentados são fictícios. O projeto
+não realiza vendas nem representa uma farmácia real.
+
+## Desenvolvimento
+
+Instale as dependências e inicie o servidor local:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abra [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Validações disponíveis:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+```
 
-## Learn More
+## Variáveis de ambiente
 
-To learn more about Next.js, take a look at the following resources:
+Copie `.env.example` para `.env.local` e configure quando necessário:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `NEXT_PUBLIC_SITE_URL`: URL pública absoluta do deploy, sem caminho e,
+  preferencialmente, sem barra final. Exemplo: `https://www.exemplo.com.br`.
+  É obrigatória em produção para canonicals, Open Graph, robots, sitemap e
+  JSON-LD apontarem para o domínio correto.
+- `NEXT_PUBLIC_API_PRODUTOS_URL`: endpoint público do Google Apps Script que
+  retorna o catálogo em JSON. Se não for informado, o endpoint demonstrativo
+  versionado no projeto continua em uso.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Não versione `.env.local`. O arquivo já está coberto pelo `.gitignore`.
 
-## Deploy on Vercel
+## Deploy
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+O projeto pode ser publicado em uma plataforma compatível com Next.js 16.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Configure `NEXT_PUBLIC_SITE_URL` com o domínio final em HTTPS.
+2. Configure `NEXT_PUBLIC_API_PRODUTOS_URL` se o endpoint do catálogo for
+   diferente do endpoint demonstrativo atual.
+3. Garanta que o Google Apps Script esteja publicado para leitura pública e
+   retorne JSON com o formato esperado pelo projeto.
+4. Execute `npm install` e `npm run build` no pipeline de produção.
+5. Inicie a aplicação com `npm run start` quando a plataforma não administrar
+   esse processo automaticamente.
+
+O sitemap tenta carregar os produtos da API para incluir as páginas dinâmicas.
+Se a API estiver indisponível, ele mantém as páginas estáticas e não interrompe
+o build. Antes de publicar, valide `/robots.txt`, `/sitemap.xml`, uma página de
+produto e a imagem social no domínio definitivo.
+
+Sem `NEXT_PUBLIC_SITE_URL` durante um build de produção, o projeto usa o domínio
+reservado `https://rodevita.example` apenas como fallback técnico. Esse fallback
+não deve ser usado em um deploy público.

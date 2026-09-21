@@ -1,6 +1,8 @@
 import type { Produto } from "@/data/produtos";
-const URL_PRODUTOS =
+const DEFAULT_PRODUCTS_URL =
   "https://script.google.com/macros/s/AKfycbzW9i1xHF_fG-hES1yWNi0bZl-L05Bf9NjhVuUJJuAdT_cc72KK5GrFQM06RZzusKp5zg/exec";
+const URL_PRODUTOS =
+  process.env.NEXT_PUBLIC_API_PRODUTOS_URL?.trim() || DEFAULT_PRODUCTS_URL;
 
 export type ProdutoApi = Produto & {
   disponivel: boolean;

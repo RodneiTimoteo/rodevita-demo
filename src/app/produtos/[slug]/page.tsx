@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProductCatalog } from "@/services/product-catalog";
 import { productSlug } from "@/utils/slug";
+import { absoluteUrl } from "@/utils/site";
+import { JsonLd } from "@/components/seo/json-ld";
 import {
   ProductDetail,
   ProductLoadError,
@@ -14,25 +16,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const produto = products.find((p) => productSlug(p) === slug);
   if (!produto)
     return {
-      title: error
-        ? "Produto indisponível | RodeVita"
-        : "Produto não encontrado | RodeVita",
+      title: error ? "Produto indisponível" : "Produto não encontrado",
       robots: { index: false, follow: true },
     };
-  const site = process.env.NEXT_PUBLIC_SITE_URL;
   return {
-    title: `${produto.nome} ${produto.dosagem} | RodeVita`,
-    description: `Consulte ${produto.nome} ${produto.dosagem} no catálogo demonstrativo da RodeVita e solicite disponibilidade pelo WhatsApp.`,
-    ...(site && /^https?:\/\//.test(site)
-      ? {
-          alternates: {
-            canonical: new URL(
-              `/produtos/${productSlug(produto)}`,
-              site,
-            ).toString(),
-          },
-        }
-      : {}),
+    title: `${produto.nome} ${produto.dosagem}`,
+    description: `${produto.nome} ${produto.dosagem}, da categoria ${produto.categoria}, no catálogo demonstrativo da RodeVita.`,
+    alternates: {
+      canonical: `/produtos/${productSlug(produto)}`,
+    },
   };
 }
 export default async function ProductPage({ params }: Props) {
@@ -47,5 +39,44 @@ export default async function ProductPage({ params }: Props) {
         p.categoria.trim() === produto.categoria.trim() && p.id !== produto.id,
     )
     .slice(0, 4);
-  return <ProductDetail produto={produto} related={related} />;
+  const productPath = `/produtos/${productSlug(produto)}`;
+  const breadcrumbData = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Início",
+        item: absoluteUrl("/"),
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Produtos",
+        item: absoluteUrl("/produtos"),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: produto.categoria,
+        item: absoluteUrl(
+          `/produtos?categoria=${encodeURIComponent(produto.categoria)}`,
+        ),
+      },
+      {
+        "@type": "ListItem",
+        position: 4,
+        name: `${produto.nome} ${produto.dosagem}`,
+        item: absoluteUrl(productPath),
+      },
+    ],
+  };
+
+  return (
+    <>
+      <JsonLd data={breadcrumbData} />
+      <ProductDetail produto={produto} related={related} />
+    </>
+  );
 }

@@ -8,7 +8,16 @@ import {
 } from "react";
 import type { Produto } from "@/data/produtos";
 import { fetchProducts, type ProdutoApi } from "@/services/products";
+import {
+  criarMensagemOrcamento,
+  isFormaPagamento,
+  type FormaPagamento,
+} from "@/utils/quote-message";
 import { whatsappUrl } from "@/utils/whatsapp";
+
+const CART_STORAGE_KEY = "carrinho-drogaria-luisa";
+const ADDRESS_STORAGE_KEY = "rodevita-endereco-orcamento";
+const PAYMENT_STORAGE_KEY = "rodevita-pagamento-orcamento";
 function mesmoProduto(a: Produto, b: Produto): boolean {
   return a.id === b.id && a.nome === b.nome && a.dosagem === b.dosagem;
 }
@@ -21,6 +30,9 @@ function useCatalogState() {
   const [carrinho, setCarrinho] = useState<ItemCarrinho[]>([]);
   const [carrinhoCarregado, setCarrinhoCarregado] = useState(false);
   const [mostrarConfirmacao, setMostrarConfirmacao] = useState(false);
+  const [enderecoOrcamento, setEnderecoOrcamento] = useState("");
+  const [formaPagamento, setFormaPagamento] =
+    useState<FormaPagamento>("Não informar");
   const [produtos, setProdutos] = useState<ProdutoApi[]>([]);
   const [carregandoProdutos, setCarregandoProdutos] = useState(true);
   const [erroProdutos, setErroProdutos] = useState<string | null>(null);
@@ -74,7 +86,9 @@ function useCatalogState() {
 
   // Carrega o carrinho salvo no navegador
   useEffect(() => {
-    const carrinhoSalvo = localStorage.getItem("carrinho-drogaria-luisa");
+    const carrinhoSalvo = localStorage.getItem(CART_STORAGE_KEY);
+    const enderecoSalvo = localStorage.getItem(ADDRESS_STORAGE_KEY);
+    const pagamentoSalvo = localStorage.getItem(PAYMENT_STORAGE_KEY);
 
     if (carrinhoSalvo) {
       try {
@@ -82,8 +96,16 @@ function useCatalogState() {
         // eslint-disable-next-line react-hooks/set-state-in-effect
         setCarrinho(JSON.parse(carrinhoSalvo));
       } catch {
-        localStorage.removeItem("carrinho-drogaria-luisa");
+        localStorage.removeItem(CART_STORAGE_KEY);
       }
+    }
+
+    if (enderecoSalvo) {
+      setEnderecoOrcamento(enderecoSalvo);
+    }
+
+    if (pagamentoSalvo && isFormaPagamento(pagamentoSalvo)) {
+      setFormaPagamento(pagamentoSalvo);
     }
 
     setCarrinhoCarregado(true);
@@ -94,12 +116,34 @@ function useCatalogState() {
     if (!carrinhoCarregado) return;
 
     if (carrinho.length === 0) {
-      localStorage.removeItem("carrinho-drogaria-luisa");
+      localStorage.removeItem(CART_STORAGE_KEY);
       return;
     }
 
-    localStorage.setItem("carrinho-drogaria-luisa", JSON.stringify(carrinho));
+    localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(carrinho));
   }, [carrinho, carrinhoCarregado]);
+
+  useEffect(() => {
+    if (!carrinhoCarregado) return;
+
+    if (!enderecoOrcamento.trim()) {
+      localStorage.removeItem(ADDRESS_STORAGE_KEY);
+      return;
+    }
+
+    localStorage.setItem(ADDRESS_STORAGE_KEY, enderecoOrcamento);
+  }, [carrinhoCarregado, enderecoOrcamento]);
+
+  useEffect(() => {
+    if (!carrinhoCarregado) return;
+
+    if (formaPagamento === "Não informar") {
+      localStorage.removeItem(PAYMENT_STORAGE_KEY);
+      return;
+    }
+
+    localStorage.setItem(PAYMENT_STORAGE_KEY, formaPagamento);
+  }, [carrinhoCarregado, formaPagamento]);
 
   function adicionarAoCarrinho(produto: Produto) {
     setCarrinho((carrinhoAtual) => {
@@ -150,26 +194,11 @@ function useCatalogState() {
   function solicitarOrcamento() {
     if (carrinho.length === 0) return;
 
-    const itens = carrinho
-      .map(
-        (item) =>
-          `• ${item.quantidade}x ${item.nome} ${item.dosagem}${
-            item.exigeReceita ? " — exige receita" : ""
-          }`,
-      )
-      .join("\n");
-
-    const possuiReceita = carrinho.some((item) => item.exigeReceita);
-
-    const mensagem = `Olá! Gostaria de consultar a disponibilidade e solicitar um orçamento dos seguintes produtos:
-
-${itens}
-
-${
-  possuiReceita
-    ? "Estou ciente de que alguns itens podem exigir apresentação de receita médica.\n\n"
-    : ""
-}Aguardo o retorno. Obrigado!`;
+    const mensagem = criarMensagemOrcamento({
+      itens: carrinho,
+      endereco: enderecoOrcamento,
+      formaPagamento,
+    });
 
     const url = whatsappUrl(mensagem);
 
@@ -178,8 +207,12 @@ ${
   }
 
   function limparCarrinho() {
-    localStorage.removeItem("carrinho-drogaria-luisa");
+    localStorage.removeItem(CART_STORAGE_KEY);
+    localStorage.removeItem(ADDRESS_STORAGE_KEY);
+    localStorage.removeItem(PAYMENT_STORAGE_KEY);
     setCarrinho([]);
+    setEnderecoOrcamento("");
+    setFormaPagamento("Não informar");
     setMostrarConfirmacao(false);
   }
 
@@ -197,6 +230,10 @@ ${
     quantidadeTotal,
     mostrarConfirmacao,
     setMostrarConfirmacao,
+    enderecoOrcamento,
+    setEnderecoOrcamento,
+    formaPagamento,
+    setFormaPagamento,
     adicionarAoCarrinho,
     aumentarQuantidade,
     diminuirQuantidade,

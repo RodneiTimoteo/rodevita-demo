@@ -1,5 +1,6 @@
 "use client";
 import { Button } from "@/components/ui";
+import { FORMAS_PAGAMENTO, type FormaPagamento } from "@/utils/quote-message";
 import { useCatalog } from "./catalog-provider";
 export function QuotePanel({ className = "" }: { className?: string }) {
   const {
@@ -7,6 +8,10 @@ export function QuotePanel({ className = "" }: { className?: string }) {
     quantidadeTotal,
     mostrarConfirmacao,
     setMostrarConfirmacao,
+    enderecoOrcamento,
+    setEnderecoOrcamento,
+    formaPagamento,
+    setFormaPagamento,
     aumentarQuantidade,
     diminuirQuantidade,
     removerProduto,
@@ -87,14 +92,74 @@ export function QuotePanel({ className = "" }: { className?: string }) {
       )}
 
       {carrinho.length > 0 && (
-        <Button
-          type="button"
-          onClick={solicitarOrcamento}
-          variant="whatsapp"
-          className="mt-6 w-full"
-        >
-          Solicitar orçamento pelo WhatsApp
-        </Button>
+        <>
+          <section
+            className="mt-6 rounded-2xl border border-border bg-background p-4"
+            aria-labelledby="informacoes-orcamento"
+          >
+            <h3
+              id="informacoes-orcamento"
+              className="font-semibold text-foreground"
+            >
+              Informações para o orçamento
+            </h3>
+            <p id="informacoes-opcionais" className="mt-1 text-xs text-muted">
+              Essas informações são opcionais.
+            </p>
+
+            <div className="mt-4">
+              <label
+                htmlFor="endereco-orcamento"
+                className="text-sm font-semibold text-foreground"
+              >
+                Endereço (opcional)
+              </label>
+              <textarea
+                id="endereco-orcamento"
+                className="ui-input mt-2 min-h-24 resize-y text-sm"
+                rows={3}
+                autoComplete="street-address"
+                placeholder="Rua, número, bairro ou referência"
+                aria-describedby="informacoes-opcionais"
+                value={enderecoOrcamento}
+                onChange={(event) => setEnderecoOrcamento(event.target.value)}
+              />
+            </div>
+
+            <div className="mt-4">
+              <label
+                htmlFor="pagamento-orcamento"
+                className="text-sm font-semibold text-foreground"
+              >
+                Forma de pagamento (opcional)
+              </label>
+              <select
+                id="pagamento-orcamento"
+                className="ui-input mt-2 text-sm"
+                aria-describedby="informacoes-opcionais"
+                value={formaPagamento}
+                onChange={(event) =>
+                  setFormaPagamento(event.target.value as FormaPagamento)
+                }
+              >
+                {FORMAS_PAGAMENTO.map((option) => (
+                  <option key={option} value={option}>
+                    {option}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </section>
+
+          <Button
+            type="button"
+            onClick={solicitarOrcamento}
+            variant="whatsapp"
+            className="mt-6 w-full"
+          >
+            Solicitar orçamento pelo WhatsApp
+          </Button>
+        </>
       )}
 
       {mostrarConfirmacao && (

@@ -4,9 +4,10 @@ import { Container, SectionTitle, buttonStyles } from "@/components/ui";
 import { InstitutionalHero } from "@/components/institutional/shared";
 import { OfferSelections } from "@/components/institutional/offer-selections";
 export const metadata: Metadata = {
-  title: "Ofertas | RodeVita Drogaria & Bem-estar",
+  title: "Ofertas",
   description:
     "Explore seleções demonstrativas da RodeVita para higiene, cuidados e bem-estar. Campanhas fictícias, sem ofertas comerciais reais.",
+  alternates: { canonical: "/ofertas" },
 };
 export default function OffersPage() {
   return (

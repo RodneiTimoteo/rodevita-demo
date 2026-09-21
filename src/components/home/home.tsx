@@ -4,13 +4,13 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useCatalog } from "@/components/catalog/catalog-provider";
 import { filterProducts } from "@/components/catalog/filter-products";
+import { HeroCarousel } from "@/components/home/hero-carousel";
 import {
   CategorySection,
   Differentials,
   EditorialSection,
   FeaturedProducts,
   FinalCta,
-  Hero,
   HomeSearch,
   HowItWorks,
   ServicesSummary,
@@ -77,7 +77,7 @@ export default function Home() {
 
   return (
     <main id="catalogo" tabIndex={-1} className="flex-1 bg-background">
-      <Hero />
+      <HeroCarousel />
       <HomeSearch
         busca={busca}
         onSearch={setBusca}

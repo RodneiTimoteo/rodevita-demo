@@ -74,97 +74,6 @@ function Icon({ index = 0 }: { index?: number }) {
   return <LineIcon path={iconPaths[index % iconPaths.length]} />;
 }
 
-function HeroActions() {
-  return (
-    <div className="mt-8 flex flex-wrap gap-3">
-      <Link className={buttonStyles()} href="/produtos">
-        Explorar produtos <span aria-hidden="true">↗</span>
-      </Link>
-      <a
-        className={buttonStyles("secondary")}
-        href={whatsapp}
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Falar pelo WhatsApp
-      </a>
-    </div>
-  );
-}
-
-function ProductComposition() {
-  return (
-    <div className="product-composition" aria-hidden="true">
-      <div className="composition-orbit" />
-      <div className="concept-box">
-        <span className="text-health">
-          <Icon index={2} />
-        </span>
-        <strong>RodeVita</strong>
-        <span>CUIDADO DIÁRIO</span>
-        <div className="concept-stripe" />
-        <small>
-          Bem-estar
-          <br />
-          em cada detalhe.
-        </small>
-      </div>
-      <div className="concept-bottle">
-        <div className="bottle-cap" />
-        <Icon index={2} />
-        <strong>RodeVita</strong>
-        <span>ESSENCIAL</span>
-        <small>
-          Cuidado para
-          <br />
-          todos os dias.
-        </small>
-      </div>
-      <div className="composition-note">
-        <span className="text-health">
-          <Icon index={4} />
-        </span>
-        <div>
-          <strong>O cuidado começa aqui.</strong>
-          <small>Mais perto de você, todos os dias.</small>
-        </div>
-      </div>
-      <span className="composition-caption">
-        COMPOSIÇÃO CONCEITUAL · RODEVITA
-      </span>
-    </div>
-  );
-}
-
-export function Hero() {
-  return (
-    <section id="inicio" className="hero-section">
-      <Container className="grid items-center gap-8 py-14 lg:grid-cols-2 lg:py-20">
-        <div>
-          <p className="eyebrow">Saúde e bem-estar para toda a família</p>
-          <SectionTitle as="h1" className="hero-title">
-            Cuidado que está sempre{" "}
-            <span className="text-health">perto de você.</span>
-          </SectionTitle>
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-muted">
-            Encontre medicamentos, higiene, beleza e produtos para toda a
-            família de forma simples, rápida e prática.
-          </p>
-          <HeroActions />
-          <div className="mt-9 flex flex-wrap gap-x-5 gap-y-3 border-t border-border pt-6 text-xs font-medium text-brand">
-            {["Catálogo digital", "Atendimento próximo", "Orçamento pelo WhatsApp"].map(
-              (text) => (
-                <span key={text}>✓ {text}</span>
-              ),
-            )}
-          </div>
-        </div>
-        <ProductComposition />
-      </Container>
-    </section>
-  );
-}
-
 export function HomeSearch({
   busca,
   onSearch,
@@ -181,8 +90,8 @@ export function HomeSearch({
   erro: string | null;
 }) {
   return (
-    <section className="bg-surface" aria-labelledby="busca-titulo">
-      <Container className="py-16 md:py-20">
+    <section className="home-chapter bg-surface" aria-labelledby="busca-titulo">
+      <Container className="pb-16 pt-6 md:pb-20 md:pt-8">
         <div className="search-panel mx-auto max-w-4xl rounded-3xl bg-background shadow-sm">
           <p className="eyebrow">Seu cuidado a poucos cliques de distância</p>
           <SectionTitle id="busca-titulo" className="text-2xl md:text-3xl">
@@ -246,8 +155,8 @@ export function CategorySection({
   onSelect: (value: string) => void;
 }) {
   return (
-    <section id="categorias" aria-labelledby="categorias-titulo">
-      <Container className="py-16 md:py-20">
+    <section id="categorias" className="home-chapter bg-health-soft" aria-labelledby="categorias-titulo">
+      <Container className="py-20 md:py-24">
         <div className="section-heading">
           <div>
             <p className="eyebrow">Para cada momento, um cuidado</p>
@@ -309,8 +218,8 @@ export function FeaturedProducts({
   getQuantity: (produto: Produto) => number;
 }) {
   return (
-    <section className="bg-surface" aria-labelledby="destaques-titulo">
-      <Container className="py-16 md:py-20">
+    <section className="home-chapter bg-surface" aria-labelledby="destaques-titulo">
+      <Container className="py-20 md:py-24">
         <div className="section-heading">
           <div>
             <p className="eyebrow">Uma seleção para o seu dia</p>
@@ -357,8 +266,8 @@ export function FeaturedProducts({
 
 export function EditorialSection() {
   return (
-    <section className="bg-health-soft" aria-labelledby="editorial-titulo">
-      <Container className="grid gap-6 py-16 md:py-20 lg:grid-cols-2">
+    <section className="home-chapter bg-health-soft" aria-labelledby="editorial-titulo">
+      <Container className="grid gap-6 py-20 md:py-24 lg:grid-cols-2">
         <article className="editorial bg-surface">
           <span className="editorial-symbol text-health" aria-hidden="true">
             ♡
@@ -409,8 +318,8 @@ export function ServicesSummary() {
     ["Atendimento pelo WhatsApp", "Leve sua lista direto para a conversa."],
   ];
   return (
-    <section id="servicos" aria-labelledby="servicos-titulo">
-      <Container className="py-16 md:py-20">
+    <section id="servicos" className="home-chapter bg-background" aria-labelledby="servicos-titulo">
+      <Container className="py-20 md:py-24">
         <div className="section-heading">
           <div>
             <p className="eyebrow">Acolher também é cuidar</p>
@@ -453,8 +362,8 @@ export function HowItWorks() {
     ["Solicite", "Envie sua lista pelo WhatsApp."],
   ];
   return (
-    <section className="home-steps bg-brand text-surface" aria-labelledby="como-funciona-titulo">
-      <Container className="py-16 md:py-20">
+    <section className="home-chapter home-steps bg-brand text-surface" aria-labelledby="como-funciona-titulo">
+      <Container className="py-20 md:py-24">
         <div className="max-w-2xl">
           <p className="eyebrow text-gold">Como funciona</p>
           <SectionTitle id="como-funciona-titulo" className="text-3xl text-surface md:text-4xl">
@@ -489,8 +398,8 @@ export function Differentials() {
     "Experiência simples",
   ];
   return (
-    <section id="sobre" className="bg-surface" aria-labelledby="diferenciais-titulo">
-      <Container className="grid gap-12 py-16 md:py-20 lg:grid-cols-[.8fr_1.2fr]">
+    <section id="sobre" className="home-chapter bg-surface" aria-labelledby="diferenciais-titulo">
+      <Container className="grid gap-12 py-20 md:py-24 lg:grid-cols-[.8fr_1.2fr]">
         <div>
           <p className="eyebrow">Nossa essência</p>
           <SectionTitle id="diferenciais-titulo" className="max-w-sm text-3xl">
@@ -518,8 +427,8 @@ export function Differentials() {
 
 export function FinalCta() {
   return (
-    <section id="contato" className="bg-health-soft">
-      <Container className="py-16 md:py-20">
+    <section id="contato" className="home-chapter bg-health-soft">
+      <Container className="py-20 md:py-24">
         <div className="final-cta bg-surface">
           <p className="eyebrow">RodeVita · Drogaria & Bem-estar</p>
           <SectionTitle className="mx-auto max-w-2xl text-3xl md:text-4xl">

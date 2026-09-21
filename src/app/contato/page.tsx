@@ -7,9 +7,10 @@ import {
 } from "@/components/institutional/shared";
 import { ContactForm } from "@/components/institutional/contact-form";
 export const metadata: Metadata = {
-  title: "Contato | RodeVita Drogaria & Bem-estar",
+  title: "Contato",
   description:
     "Explore os canais fictícios de contato da RodeVita e seu formulário demonstrativo. Nenhuma mensagem ou dado é enviado pelo formulário.",
+  alternates: { canonical: "/contato" },
 };
 export default function ContactPage() {
   return (
